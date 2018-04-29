@@ -9,21 +9,21 @@ TIME_RANGE_REGEXP =
 # e.g. 'Apr 24 5:36pm', year is assumed to be current one
 STRPTIME_FORMAT_DATETIME = '%b %d %l:%M%P'.freeze
 # ASSUMED_TIMEZONE = 'America/New_York'.freeze
-DEFAULT_DATETIME_OUTPUT_FORMAT = '%c %Z'.freeze
+# DEFAULT_DATETIME_OUTPUT_FORMAT = '%c %Z'.freeze
 
 class Activity
   attr_accessor :name
-  attr_accessor :datetime_from
-  attr_accessor :datetime_to
+  attr_accessor :dt_from
+  attr_accessor :dt_to
   
-  def initialize(activity_title, datetime_from, datetime_to)
+  def initialize(activity_title, dt_from, dt_to)
     @name = activity_title
-    @datetime_from = datetime_from
-    @datetime_to = datetime_to
+    @dt_from = dt_from
+    @dt_to = dt_to
   end
 
   def to_json_formattable
-    { 'name' => @name, 'from' => @datetime_from, 'to' => @datetime_to }
+    { 'name' => @name, 'from' => @dt_from, 'to' => @dt_to }
   end
 end
 
@@ -40,7 +40,7 @@ class Location
     { 'name' => @name, 'activities' => @activities.map(&:to_json_formattable) }
   end
 end
-
+ 
 class Schedule
   attr_accessor :locations
 
