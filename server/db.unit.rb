@@ -11,22 +11,28 @@ class TestActivitiesDatabase < Test::Unit::TestCase
     @test_schedule = Schedule.new
     @test_schedule.locations.push(@location1)
     @test_schedule.locations.push(@location2)
-    @db = ActivitiesDatabase.new(SQLite3::Database.new(':memory:'))
-    # The DB is already assumed to have the table for locations with data
-    @db.db.execute 'CREATE TABLE IF NOT EXISTS
+    @database = SQLite3::Database.new(':memory:')
+    @database.execute 'CREATE TABLE IF NOT EXISTS
                     locations(id INTEGER PRIMARY KEY, name TEXT, longitude REAL,
                     latitude REAL, address TEXT)'
-    @db.db.execute "INSERT INTO locations(name, longitude, latitude, address)
-                 VALUES('#{location1.name}', 1, 1, '123 Fake St.')"
-    @db.db.execute "INSERT INTO locations(name, longitude, latitude, address)
-                 VALUES('#{location2.name}', 2, 2, '4 Something Lane')"
+    @database.execute "INSERT INTO locations(name, longitude, latitude, address)
+                 VALUES('#{@location1.name}', 1, 1, '123 Fake St.')"
+    @database.execute "INSERT INTO locations(name, longitude, latitude, address)
+                 VALUES('#{@location2.name}', 2, 2, '4 Something Lane')"
+    @db = ActivitiesDatabase.new(@database)
+    # The DB is already assumed to have the table for locations with data
   end
   def test_simple
     @db.load_schedule(@test_schedule)
-    q = @db.db.prepare 'SELECT id, name FROM activities'
+    q = @db.db.prepare 'SELECT id, name FROM locations'
     result = q.execute
     row = result.next
     assert_equal(1, row[0])
     assert_equal('Memorial Pool', row[1])
+  end
+  def test_get_location_by_name
+    @db.load_schedule(@test_schedule)
+    result = @db.test_get_location_by_id(1)
+    assert_equal('Memorial Pool', result)
   end
 end

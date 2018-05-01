@@ -1,0 +1,1 @@
+SQLITE_DATE_FORMAT = '%F %R%S.%L'
