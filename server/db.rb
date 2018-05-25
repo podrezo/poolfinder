@@ -29,8 +29,8 @@ class ActivitiesDatabase
       # q = @db.prepare 'SELECT id FROM locations WHERE name=? LIMIT 1'
       # q.bind_param(1, location.name)
       #current_location_id = db.last_insert_row_id
-      get_location_by_id()
-      load_activities(q.execute.next[0], location.activities)
+      location_id = get_location_by_name(location.name)
+      load_activities(location_id, location.activities)
     end
   end
 
@@ -49,9 +49,12 @@ class ActivitiesDatabase
       # we convert from our ruby DateTime to that format in storage
       dt_from = activity.dt_from.strftime(SQLITE_DATE_FORMAT)
       dt_to = activity.dt_to.strftime(SQLITE_DATE_FORMAT)
-      @db.execute "INSERT INTO activities(location_id, name, dt_from, dt_to)
-                   VALUES(#{location_id}, '#{activity.name}',
-                   '#{dt_from}','#{dt_to}')"
+      q = @db.prepare 'INSERT INTO activities(location_id, name, dt_from, dt_to) VALUES (?, ?, ?, ?)'
+      q.bind_param(1, location_id)
+      q.bind_param(2, activity.name)
+      q.bind_param(3, dt_from)
+      q.bind_param(4, dt_to)
+      q.execute
     end
   end
 end

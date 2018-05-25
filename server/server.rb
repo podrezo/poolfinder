@@ -31,6 +31,7 @@ end
 get '/api/open-now' do
   q = db.db.prepare 'SELECT location_id, name, dt_from, dt_to FROM activities WHERE dt_from<? AND ?<dt_to'
   q.bind_param(1, DateTime.now.format(SQLITE_DATE_FORMAT))
+  q.bind_param(2, DateTime.now.format(SQLITE_DATE_FORMAT))
   result = q.execute
   activities = []
   result.each do |activity_row|

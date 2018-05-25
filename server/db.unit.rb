@@ -22,6 +22,7 @@ class TestActivitiesDatabase < Test::Unit::TestCase
     @db = ActivitiesDatabase.new(@database)
     # The DB is already assumed to have the table for locations with data
   end
+
   def test_simple
     @db.load_schedule(@test_schedule)
     q = @db.db.prepare 'SELECT id, name FROM locations'
@@ -30,9 +31,10 @@ class TestActivitiesDatabase < Test::Unit::TestCase
     assert_equal(1, row[0])
     assert_equal('Memorial Pool', row[1])
   end
+
   def test_get_location_by_name
     @db.load_schedule(@test_schedule)
-    result = @db.test_get_location_by_id(1)
+    result = @db.get_location_by_id(1)
     assert_equal('Memorial Pool', result)
   end
 end
