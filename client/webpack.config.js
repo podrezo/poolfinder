@@ -42,6 +42,14 @@ const config = {
         }
       },
       {
+        test: /.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015', 'react']
+        }
+      },
+      {
         test: /\.scss$/,
         include: [path.resolve(__dirname, 'src', 'assets', 'scss')],
         use: [
