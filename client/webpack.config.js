@@ -17,7 +17,7 @@ const config = {
   mode: 'production',
   resolve: {
 		modules: ['node_modules'],
-		extensions: ['.js', '.json']
+		extensions: ['.js', '.json', '.jsx']
   },
   // externals: {
   //   firebase: 'firebase'
