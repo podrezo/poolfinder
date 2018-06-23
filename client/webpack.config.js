@@ -51,7 +51,10 @@ const config = {
       },
       {
         test: /\.scss$/,
-        include: [path.resolve(__dirname, 'src', 'assets', 'scss')],
+        include: [
+          path.resolve(__dirname, 'src', 'assets', 'scss'),
+          path.resolve(__dirname, 'node_modules', 'purecss-sass', 'vendor', 'assets', 'stylesheets')
+        ],
         use: [
           "style-loader", // creates style nodes from JS strings
           "css-loader", // translates CSS into CommonJS
