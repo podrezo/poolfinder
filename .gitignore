@@ -1,2 +1,4 @@
 *.db
 key.json
+client/node_modules
+client/dist
