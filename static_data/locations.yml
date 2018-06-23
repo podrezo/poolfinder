@@ -1,0 +1,277 @@
+---
+-
+    unique_facility_id: 323
+    name: 'Agincourt Recreation Centre'
+    longitude: -79.27629313
+    latitude: 43.78841444
+    address: '31 Glen Watford Dr'
+-
+    unique_facility_id: 777
+    name: 'Albert Campbell Collegiate Institute'
+    longitude: -79.27340979
+    latitude: 43.80902284
+    address: '1550 Sandhurst Crcl'
+-
+    unique_facility_id: 1680
+    name: 'Albion Pool And Health Club'
+    longitude: -79.58119369
+    latitude: 43.73929345
+    address: '1485 Albion Rd'
+-
+    unique_facility_id: 1688
+    name: 'Alderwood Pool'
+    longitude: -79.54735577
+    latitude: 43.60190521
+    address: '2 Orianna Dr'
+-
+    unique_facility_id: 124
+    name: 'Antibes Community Centre'
+    longitude: -79.44697983
+    latitude: 43.78116358
+    address: '140 Antibes Dr'
+-
+    unique_facility_id: 80
+    name: 'Beaches Recreation Centre'
+    longitude: -79.29881027
+    latitude: 43.67393961
+    address: '6 Williamson Rd'
+-
+    unique_facility_id: 165
+    name: 'Birchmount Community Centre'
+    longitude: -79.26311121
+    latitude: 43.69563261
+    address: '93 Birchmount Rd'
+-
+    unique_facility_id: 97
+    name: 'Brown Community Centre'
+    longitude: -79.40131552
+    latitude: 43.6849215
+    address: '454 Avenue Rd'
+-
+    unique_facility_id: 35
+    name: 'Centennial Recreation Centre - Etobicoke'
+    longitude: -79.47698428
+    latitude: 43.69007765
+    address: '2694 Eglinton Ave W'
+-
+    unique_facility_id: 454
+    name: 'Centennial Recreation Centre-Scarborough'
+    longitude: -79.23511108
+    latitude: 43.77554037
+    address: '1967 Ellesmere Rd'
+-
+    unique_facility_id: 131
+    name: 'Cummer Park Community Centre'
+    longitude: -79.37126221
+    latitude: 43.80010377
+    address: '6000 Leslie St'
+-
+    unique_facility_id: 1303
+    name: 'DA Morrison Junior High School'
+    longitude: -79.31169566
+    latitude: 43.69540506
+    address: '271 Gledhill Ave'
+-
+    unique_facility_id: 707
+    name: 'Dennis R.Timbrell Resource Centre'
+    longitude: -79.33169059
+    latitude: 43.71794928
+    address: '29 St Dennis Dr'
+-
+    unique_facility_id: 631
+    name: 'Douglas Snow Aquatic Centre'
+    longitude: -79.41289647
+    latitude: 43.76781434
+    address: '5100 Yonge St'
+-
+    unique_facility_id: 109
+    name: 'Earl Beatty Community Centre'
+    longitude: -79.32156863
+    latitude: 43.6862324
+    address: '455 Glebeholme Blvd'
+-
+    unique_facility_id: 814
+    name: 'East York Community Centre'
+    longitude: -79.34927367
+    latitude: 43.69179258
+    address: '1081 1/2 Pape Ave'
+-
+    unique_facility_id: 599
+    name: 'Emery Collegiate Institute'
+    longitude: -79.53955698
+    latitude: 43.74872271
+    address: '3395 Weston Rd'
+-
+    unique_facility_id: 617
+    name: 'Fairmount Park Community Centre'
+    longitude: -79.31511551
+    latitude: 43.67664643
+    address: '1757 Gerrard St E'
+-
+    unique_facility_id: 118
+    name: 'Frankland Community Centre'
+    longitude: -79.34994067
+    latitude: 43.67714593
+    address: '816 Logan Ave'
+-
+    unique_facility_id: 741
+    name: 'Gordon A Brown Middle School'
+    longitude: -79.30535617
+    latitude: 43.70787791
+    address: '2800 St Clair Ave E'
+-
+    unique_facility_id: 1687
+    name: 'Gus Ryder Pool And Health Club'
+    longitude: -79.52210813
+    latitude: 43.60114448
+    address: '1 Faustina Dr'
+-
+    unique_facility_id: 130
+    name: 'Harrison Pool'
+    longitude: -79.39086445
+    latitude: 43.65105808
+    address: '15 Stephanie St'
+-
+    unique_facility_id: 137
+    name: 'Hillcrest Community Centre'
+    longitude: -79.41649871
+    latitude: 43.67920594
+    address: '1339 Bathurst St'
+-
+    unique_facility_id: 1511
+    name: 'Humber Community Pool'
+    longitude: -79.60683987
+    latitude: 43.72916655
+    address: '205 Humber College Blvd'
+-
+    unique_facility_id: 154
+    name: 'Jimmie Simpson Recreation Centre'
+    longitude: -79.34533309
+    latitude: 43.66045212
+    address: '870 Queen St E'
+-
+    unique_facility_id: 173
+    name: 'Joseph J. Piccininni Community Centre'
+    longitude: -79.45139986
+    latitude: 43.67533938
+    address: '1369 St Clair Ave W'
+-
+    unique_facility_id: 1344
+    name: 'Lester B. Pearson Collegiate Institute'
+    longitude: -79.22540187
+    latitude: 43.80334254
+    address: '150 Tapscott Rd'
+-
+    unique_facility_id: 199
+    name: 'Main Square Community Centre'
+    longitude: -79.30018106
+    latitude: 43.68735404
+    address: '245 Main St'
+-
+    unique_facility_id: 223
+    name: 'Mary McCormick Recreation Centre'
+    longitude: -79.43344683
+    latitude: 43.64735264
+    address: '66 Sheridan Ave'
+-
+    unique_facility_id: 431
+    name: 'Matty Eckler Recreation Centre'
+    longitude: -79.33940021
+    latitude: 43.66806225
+    address: '953 Gerrard St E'
+-
+    unique_facility_id: 14
+    name: 'Nelson A. Boylen Collegiate Institute'
+    longitude: -79.49547522
+    latitude: 43.71713612
+    address: '155 Falstaff Ave'
+-
+    unique_facility_id: 1420
+    name: 'Norseman Community School And Pool'
+    longitude: -79.51633302
+    latitude: 43.63431384
+    address: '105 Norseman St'
+-
+    unique_facility_id: 445
+    name: 'Parkdale Community Recreation Centre'
+    longitude: -79.43746726
+    latitude: 43.64340418
+    address: '75 Lansdowne Ave'
+-
+    unique_facility_id: 1168
+    name: 'Regent Park Aquatic Centre'
+    longitude: -79.36096074
+    latitude: 43.66076364
+    address: '640 Dundas St E'
+-
+    unique_facility_id: 174
+    name: 'Runnymede Collegiate Institute'
+    longitude: -79.48981466
+    latitude: 43.66354085
+    address: '569 Jane St'
+-
+    unique_facility_id: 497
+    name: 'S.H. Armstrong Community Centre'
+    longitude: -79.32284165
+    latitude: 43.66595839
+    address: '56 Woodfield Rd'
+-
+    unique_facility_id: 591
+    name: 'Scadding Court Community Centre'
+    longitude: -79.40489713
+    latitude: 43.65179429
+    address: '707 Dundas St W'
+-
+    unique_facility_id: 1395
+    name: 'Sir Oliver Mowat Collegiate Institute'
+    longitude: -79.14224148
+    latitude: 43.77931055
+    address: '5400 Lawrence Ave E'
+-
+    unique_facility_id: 517
+    name: 'St. Lawrence Community Recreation Centre'
+    longitude: -79.36498334
+    latitude: 43.64980612
+    address: '230 The Esplanade'
+-
+    unique_facility_id: 537
+    name: 'Swansea Community Recreation Centre'
+    longitude: -79.4771188
+    latitude: 43.64411206
+    address: '15 Waller Ave'
+-
+    unique_facility_id: 1404
+    name: 'The Elms Community School'
+    longitude: -79.55211708
+    latitude: 43.72223589
+    address: '45 Golfdown Dr'
+-
+    unique_facility_id: 550
+    name: 'Trinity Community Recreation Centre'
+    longitude: -79.41537391
+    latitude: 43.64643528
+    address: '155 Crawford St'
+-
+    unique_facility_id: 166
+    name: 'Vaughan Road Academy'
+    longitude: -79.43670608
+    latitude: 43.69103029
+    address: '529 Vaughan Rd'
+-
+    unique_facility_id: 570
+    name: 'Wallace-Emerson Community Centre'
+    longitude: -79.43927386
+    latitude: 43.66732359
+    address: '1260 Dufferin St'
+-
+    unique_facility_id: 178
+    name: 'Weston Collegiate Institute'
+    longitude: -79.50942503
+    latitude: 43.7038249
+    address: '100 Pine St'
+-
+    unique_facility_id: 652
+    name: 'Wexford Collegiate Institute'
+    longitude: -79.3067986
+    latitude: 43.74616817
+    address: '1176 Pharmacy Ave'

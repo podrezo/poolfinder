@@ -1,0 +1,4 @@
+gem 'nokogiri'
+gem 'test-unit'
+gem 'sqlite3'
+gem 'google-cloud-firestore'

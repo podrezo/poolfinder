@@ -1,4 +1,0 @@
-gem 'nokogiri'
-gem 'test-unit'
-gem 'sinatra'
-gem 'sqlite3'
