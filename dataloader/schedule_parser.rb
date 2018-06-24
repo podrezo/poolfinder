@@ -11,97 +11,87 @@ STRPTIME_FORMAT_DATETIME = '%b %d %l:%M%P'.freeze
 # ASSUMED_TIMEZONE = 'America/New_York'.freeze
 # DEFAULT_DATETIME_OUTPUT_FORMAT = '%c %Z'.freeze
 
-class Activity
-  attr_accessor :name
-  attr_accessor :dt_from
-  attr_accessor :dt_to
-  
-  def initialize(activity_title, dt_from, dt_to)
-    @name = activity_title
-    @dt_from = dt_from
-    @dt_to = dt_to
-  end
 
-  def to_json_formattable
-    { 'name' => @name, 'from' => @dt_from, 'to' => @dt_to }
-  end
-end
-
-class Location
-  attr_accessor :name
-  attr_accessor :activities
-
-  def initialize(name)
-    self.name = name
-    self.activities = []
-  end
-
-  def to_json_formattable
-    { 'name' => @name, 'activities' => @activities.map(&:to_json_formattable) }
-  end
-end
- 
-class Schedule
-  attr_accessor :locations
-
-  def initialize
-    self.locations = []
-  end
-
-  def to_json_formattable
-    { 'locations' => @locations.map(&:to_json_formattable) }
-  end
-end
-
-# Parses a given URL into meaningful data chunks
-class InfoParser
-  def self.parse_page_url(url)
+# Parses a given URL into a schedule dictionary
+class ScheduleParser
+  def self.parse(url = 'dataloader/static_data/leisure-drop-in.html')
     page = Nokogiri::HTML(open(url))
     parse_document(page)
   end
 
+  # To understand how this parser works, it is helpful to look at the source
+  # HTML page in your browser. Basically the HTML is structured as follows:
+  #
+  # List of locations (Root)
+  # |
+  # +- Location (e.g. Agincourt Recreation Centre)
+  #    |
+  #    +- Activity + Week (e.g. "Leisure Swim" and "Jun 17 to Jun 23")
+  #       |
+  #       +- Day of the week (e.g. Monday)
+  #          |
+  #          +- List of times (e.g. 2 - 5pm, 5:30 - 9pm)
+  #             |
+  #             +- Specific time span (e.g. 2 - 5pm)
+
   def self.parse_document(page)
-    schedule = Schedule.new
     listings = page.css('.pfrProgramDescrList .pfrListing')
-    listings.each { |location_html|
+    listings.map { |location_html|
       # Sanity check - does the table have the expected columns?
       table_header = location_html.css('table thead tr th').text.strip
       raise "Unexpected table heading '#{table_header}'" if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
-
-      # Create location
       location_name = location_html.css('h2 a').text
-      location = Location.new(location_name)
-      schedule.locations.push(location)
-      parse_weeks(location, location_html)
+      # Build result
+      {
+        location_name: location_name,
+        activities: parse_weeks(location_html).flatten
+      }
     }
-    schedule
   end
 
-  def self.parse_weeks(location, location_html)
+  def self.parse_weeks(location_html)
     weeks_html = location_html.css('table tbody tr')
-    weeks_html.each do |week_html|
+    weeks_html.map do |week_html|
       activity_title = week_html.css('th div').text.strip
       row_title = week_html.css('th').text.strip
       week_dates =
         row_title[activity_title.length..row_title.length].strip.split(' to ')
       hours_cells_html = week_html.css('td')
-      parse_hours(location, hours_cells_html, week_dates[0], activity_title)
+      # There may be multiple hours for the same day, but we want a flat
+      # array of times so we use flatten
+      hours = parse_hours(hours_cells_html, week_dates[0]).flatten
+      {
+        name: activity_title,
+        hours: hours
+      }
     end
   end
 
-  def self.parse_hours(location, hours_html, week_start, activity_title)
-    hours_html.each_with_index do |hours_cell_html, day_offset|
-      hours_text = hours_cell_html.text.strip
-      # sometimes we get a blank with just a space
-      # TODO: it should not come back as blank!
-      next if hours_text.length == 1
-      range = parse_range(week_start, day_offset, hours_text)
-      # Assert that we have the matching day of the week
-      day_of_the_week_attr = hours_cell_html.attr('data-info')
-      raise "Unexpected day of the week '#{range[0].strftime('%a')}' doesn't match '#{day_of_the_week_attr}'" if range[0].strftime('%a') != day_of_the_week_attr
-      activity = Activity.new(activity_title, range[0], range[1])
-      location.activities.push(activity)
-    end
+  def self.parse_hours(hours_html, week_start)
+    hours_html.each_with_index
+      .select { |hours_cell_html, day_offset|
+        # Some days don't have swim times, we want to skip those days
+        hours_text = hours_cell_html.text.strip
+        hours_text.length > 1
+      }
+      .map { |hours_cell_html, day_offset|
+        # The index carries over from the select, luckily!
+        # The cell can have multiple swim times in the same cell, separated by
+        # new lines.
+        # TODO: This probably shouldn't rely on splitting on an HTML tag...
+        hours_texts = hours_cell_html.inner_html.split('<br>')
+        hours_texts.map { |hours_text|
+          range = parse_range(week_start, day_offset, hours_text)
+          # Assert that we have the matching day of the week
+          day_of_the_week_attr = hours_cell_html.attr('data-info')
+          raise "Unexpected day of the week '#{range[0].strftime('%a')}' doesn't match '#{day_of_the_week_attr}'" if range[0].strftime('%a') != day_of_the_week_attr
+          # Build result
+          {
+            from: range[0],
+            to: range[1],
+          }
+        }
+      }
   end
 
   # Take a time range string and convert it to an array of two normalized times
