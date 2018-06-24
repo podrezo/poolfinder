@@ -16,4 +16,28 @@ const firestore = firebase.firestore();
 const settings = { /* your settings... */ timestampsInSnapshots: true };
 firestore.settings(settings);
 
-export default firebase;
+
+var db = firebase.firestore();
+
+var getLocations = () => {
+  return new Promise((resolve, reject) => {
+    db
+      .collection("locations")
+      // .where("name", "==", "Swansea Community Recreation Centre")
+      .get()
+      .then(querySnapshot => {
+        var results = [];
+        querySnapshot.forEach(doc => {
+          results.push(doc.data());
+        });
+        resolve(results);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export default {
+  getLocations: getLocations
+};
