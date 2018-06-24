@@ -33,11 +33,11 @@ ScheduleParser.parse.each do |location|
 end
 
 swim_times.each_with_index do |st, i|
-  puts "Processing swim time #{i+1} of #{swim_times.length}"
-  firestore.create_or_update_location(
+  puts "Processing swim time #{i+1} of #{swim_times.length}"  
+  firestore.create_or_update_schedule(
     activity_name: st[:activity_name],
     location_name: st[:location_name],
-    from: st[:from],
-    to: st[:to],
+    time_from: st[:from],
+    time_to: st[:to],
   )
 end

@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'time'
 require 'date'
 require 'nokogiri'
 require 'open-uri'
@@ -7,9 +8,12 @@ TIME_RANGE_REGEXP =
     /(\d{1,2})(:(\d{1,2}))?(am|pm)? - (\d{1,2})(:(\d{1,2}))?(am|pm)?/
 # The date-time format that's going to be supplied at the end
 # e.g. 'Apr 24 5:36pm', year is assumed to be current one
-STRPTIME_FORMAT_DATETIME = '%b %d %l:%M%P'.freeze
+STRPTIME_FORMAT_DATETIME = '%b %d %l:%M%P %z'.freeze
 # ASSUMED_TIMEZONE = 'America/New_York'.freeze
 # DEFAULT_DATETIME_OUTPUT_FORMAT = '%c %Z'.freeze
+# Toronto doesn't use timezones not on an even hour, otherwise we'd have a problem
+CURRENT_TIMEZONE = Time.now.getlocal.zone
+CURRENT_TIMEZONE_OFFSET_EASTERN = (Time.zone_offset(CURRENT_TIMEZONE) / 60 / 60) 
 
 
 # Parses a given URL into a schedule dictionary
@@ -118,12 +122,11 @@ class ScheduleParser
     # Convert times into normalized values
     times = normalize_times(times)
     # Create a string to be parsed
-    # TODO: Figure out timezones
     from_datetime = DateTime.strptime(
-      "#{date} #{times[0]}", STRPTIME_FORMAT_DATETIME
+      "#{date} #{times[0]} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
     )
     to_datetime = DateTime.strptime(
-      "#{date} #{times[1]}", STRPTIME_FORMAT_DATETIME
+      "#{date} #{times[1]} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
     )
     from_datetime = from_datetime.next_day(offset_days)
     to_datetime = to_datetime.next_day(offset_days)

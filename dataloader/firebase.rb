@@ -43,8 +43,8 @@ class PoolfinderFirestore
     @_schedule_collection.doc(hash).set({
       activity_name: activity_name,
       location_name: location_name,
-      from: from,
-      to: to,
+      from: time_from,
+      to: time_to,
     })
   end
 end
