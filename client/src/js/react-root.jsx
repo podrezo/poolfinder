@@ -111,7 +111,6 @@ class PoolList extends React.Component {
           // in addition to hours that haven't started yet.
           return (s.from.seconds < now && now < s.to.seconds) || s.from.seconds > now;
         });
-        console.log(`Matching schedule entries: ${this._schedule.length}`);
       })
       .then(() => {
         // process the pool list
