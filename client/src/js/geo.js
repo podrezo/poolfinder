@@ -1,8 +1,35 @@
-var getCoords = () => {
-  return new Promise((resolve,reject) => {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      resolve(position.coords);
-    });
+export const GEOLOCATION_ERRORS = {
+  'errors.location.unsupportedBrowser': 'Browser does not support location services',
+  'errors.location.permissionDenied': 'You have rejected access to your location',
+  'errors.location.positionUnavailable': 'Unable to determine your location',
+  'errors.location.timeout': 'Service timeout has been reached'
+};
+
+var getCoords = (geoLocationOptions) => {
+  geoLocationOptions = geoLocationOptions || { timeout: 5000 };
+  return new Promise((resolve, reject) => {
+    if (window.navigator && window.navigator.geolocation) {
+      window.navigator.geolocation.getCurrentPosition(
+        position => {
+          resolve(position.coords);
+        },
+        error => {
+          switch (error.code) {
+            case 1:
+              reject(GEOLOCATION_ERRORS['errors.location.permissionDenied']);
+              break;
+            case 2:
+              reject(GEOLOCATION_ERRORS['errors.location.positionUnavailable']);
+              break;
+            case 3:
+              reject(GEOLOCATION_ERRORS['errors.location.timeout']);
+              break;
+          }
+        },
+        geoLocationOptions);
+    } else {
+      reject(GEOLOCATION_ERRORS['errors.location.unsupportedBrowser']);
+    }
   })
 };
 
