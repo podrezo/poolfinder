@@ -6,7 +6,7 @@ export const GEOLOCATION_ERRORS = {
 };
 
 var getCoords = (geoLocationOptions) => {
-  geoLocationOptions = geoLocationOptions || { timeout: 5000 };
+  geoLocationOptions = geoLocationOptions || {maximumAge:60000, timeout:5000, enableHighAccuracy:true};
   return new Promise((resolve, reject) => {
     if (window.navigator && window.navigator.geolocation) {
       window.navigator.geolocation.getCurrentPosition(
