@@ -12,7 +12,7 @@ class LocationParserTest < Test::Unit::TestCase
       phone: '416-395-7966'
     }
 
-    result = LocationParser.parse('static_data/pools.xml')
+    result = LocationParser.parse('test_data/pools.xml')
 
     assert_equal 121, result.size
     assert_equal expected_location, result.first
