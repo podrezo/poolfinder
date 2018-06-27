@@ -1,8 +1,8 @@
-require_relative 'schedule_parser'
 require 'test/unit'
+require_relative 'schedule_parser'
 
 # Unit tests for the parser
-class TestParser < Test::Unit::TestCase
+class ScheduleParserTest < Test::Unit::TestCase
   # def test_invalid_input
   #     assert_raise "input string 'This is invalid' is not in correct format" do
   #         parse_hours('This is invalid')
@@ -17,6 +17,16 @@ class TestParser < Test::Unit::TestCase
   #         parse_hours('6am - 8')
   #     end
   # end
+
+  def test_parse
+    result = ScheduleParser.parse('static_data/leisure-drop-in.html')
+
+    assert_equal 195, result.size
+    assert_equal 'Agincourt Recreation Centre', result.first[:location_name]
+    assert_equal 'Leisure Swim', result.first[:activities].first[:name]
+    assert_equal '2018-06-17T14:00', result.first[:activities].first[:hours].first[:from].to_s[0, 16]
+    assert_equal '2018-06-17T17:00', result.first[:activities].first[:hours].first[:to].to_s[0, 16]
+  end
 
   def test_simple
     from, to = ScheduleParser.parse_range('Apr 22', 0, '6:30 - 8pm')
