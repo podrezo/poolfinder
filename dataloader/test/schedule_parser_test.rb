@@ -1,7 +1,6 @@
 require 'test/unit'
 require_relative '../lib/schedule_parser'
 
-# Unit tests for the parser
 class ScheduleParserTest < Test::Unit::TestCase
   # def test_invalid_input
   #     assert_raise "input string 'This is invalid' is not in correct format" do
