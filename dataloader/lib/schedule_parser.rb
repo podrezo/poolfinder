@@ -136,16 +136,14 @@ class ScheduleParser
     regexp_match = TIME_RANGE_REGEXP.match(time_range)
     raise "input string '#{input}' is not in correct format" if regexp_match.nil?
     from_hr = regexp_match[1]
-    from_min = regexp_match[3]
-    from_min = '00' if from_min.nil?
+    from_min = regexp_match[3] || '00'
     from_ampm = regexp_match[4]
     to_hr = regexp_match[5]
-    to_min = regexp_match[7]
-    to_min = '00' if to_min.nil?
+    to_min = regexp_match[7] || '00'
     to_ampm = regexp_match[8]
 
-    from_ampm = to_ampm if from_ampm.nil?
-    to_ampm = from_ampm if to_ampm.nil?
+    from_ampm ||= to_ampm
+    to_ampm ||= from_ampm
 
     ["#{from_hr}:#{from_min}#{from_ampm}", "#{to_hr}:#{to_min}#{to_ampm}"]
   end
