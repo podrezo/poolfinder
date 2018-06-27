@@ -4,9 +4,6 @@ import 'script-loader!moment/moment';
 import {getLocations, getSchedule} from './firebase';
 import {getCoords, distance} from './geo';
 
-
-
-
 class Pool extends React.Component {
   constructor(props) {
     super(props);
@@ -23,18 +20,19 @@ class Pool extends React.Component {
 
     // TODO: Add geo uri link like [<a href={'geo:' + this.props.pool.coordinates.latitude + ',' + this.props.pool.coordinates.longitude}>Map It</a>]
     return (
-      <tr>
-        <td>
-          <p><strong>{this.props.pool.name}</strong></p>
-          <p>{this.props.pool.address}<br/>{this.props.pool.phone}</p>
-        </td>
-        <td>{this.props.pool.distance} km</td>
-        <td>
-          <ul>
-            {swimTimesList.length > 0 ? swimTimesList : noSwimTimes}
-          </ul>
-        </td>
-      </tr>
+      <div className="pure-u-1 pure-alert spacer">
+        <div className="pure-g">
+          <div className="pure-u-1 pure-u-md-1-3">
+            <h3>{this.props.pool.name} <span className="pure-badge-info">{this.props.pool.distance} km</span></h3>
+            <p>{this.props.pool.address}<br/>{this.props.pool.phone}</p>
+          </div>
+          <div className="pure-u-1 pure-u-md-2-3">
+            <ul>
+              {swimTimesList.length > 0 ? swimTimesList : noSwimTimes}
+            </ul>
+          </div>
+        </div>
+      </div>
     );
   }
 }
@@ -130,19 +128,9 @@ export class PoolList extends React.Component {
     );
     // TODO: If there are no pools nearby display some message
     return (
-      <table className="pure-table pure-table-bordered">
-        <thead>
-          <tr>
-            <th>Location &amp; Address</th>
-            <th>Distance</th>
-            <th>Swim Times</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {rows}
-        </tbody>
-      </table>
+      <div className="pure-g">
+        {rows}
+      </div>
     );
   }
 }
