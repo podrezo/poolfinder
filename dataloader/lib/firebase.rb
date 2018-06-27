@@ -5,9 +5,9 @@ class PoolfinderFirestore
   HASHER = Digest::SHA256
 
   def initialize
-    @firestore = Google::Cloud::Firestore.new
-    @locations_collection = @firestore.col('locations')
-    @schedule_collection = @firestore.col('schedule')
+    firestore = Google::Cloud::Firestore.new
+    @locations_collection = firestore.col('locations')
+    @schedule_collection = firestore.col('schedule')
   end
 
   def create_or_update_location(args)
