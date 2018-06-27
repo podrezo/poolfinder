@@ -2,7 +2,7 @@ import 'script-loader!react/umd/react.development.js'; // TODO: change to produc
 import 'script-loader!react-dom/umd/react-dom.development.js'; // TODO: change to production
 import 'script-loader!moment/moment';
 import {getLocations, getSchedule} from './firebase';
-import {getCoords, distance} from './geo';
+import {getCoords, distance, DEFAULT_LOCATION} from './geo';
 
 class Pool extends React.Component {
   constructor(props) {
@@ -19,13 +19,18 @@ class Pool extends React.Component {
     var noSwimTimes = <p><em>N/A</em></p>
 
     // TODO: Add geo uri link like [<a href={'geo:' + this.props.pool.coordinates.latitude + ',' + this.props.pool.coordinates.longitude}>Map It</a>]
+    // TODO: Display distance using this.props.pool.distance
     return (
-      <div className="pure-u-1 pure-alert spacer">
+      <div className="pool pure-u-1">
         <div className="pure-g">
-          <div className="pure-u-1 pure-u-md-1-3">
+          <div className="pure-u-1">
             <h3 title={this.props.pool.name} className="pool-name">{this.props.pool.name}</h3>
-            <p>{this.props.pool.address}<br/>{this.props.pool.phone}</p>
-            <p><span className="pure-badge-info">{this.props.pool.distance} km</span></p>
+          </div>
+          <div className="pure-u-1 pure-u-md-1-3">
+            <p>
+              {this.props.pool.address}<br/>
+              <a href={'tel:' + this.props.pool.phone}>{this.props.pool.phone}</a>
+            </p>
           </div>
           <div className="pure-u-1 pure-u-md-2-3">
             <ul>
@@ -81,9 +86,10 @@ export class PoolList extends React.Component {
     var maxTime = new Date(Date.now() + 1000*60*60*24); // TODO: Make this configurable
     getCoords()
       .then(coords => {
-        // TODO: If this fails, use some fallback or give a notification
-        console.log(`Detected user location to be at ${coords.latitude}, ${coords.longitude}`);
         this._userCoords = coords;
+      })
+      .catch(() => {
+        this._userCoords = DEFAULT_LOCATION;
       })
       .then(getLocations)
       .then(pools => {

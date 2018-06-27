@@ -1,12 +1,12 @@
 import 'script-loader!react/umd/react.development.js'; // TODO: change to production
 import 'script-loader!react-dom/umd/react-dom.development.js'; // TODO: change to production
 import { GoogleMaps } from './google-maps';
-import { getCoords } from './geo';
+import { getCoords, DEFAULT_LOCATION } from './geo';
 
 class LocationError extends React.Component {
   render() {
     return(
-      <p><em>{this.props.message}</em></p>
+      <p className="error">{this.props.message}</p>
     )
   }
 }
@@ -26,11 +26,7 @@ export class LocationPicker extends React.Component {
         this.setState({
           error: errorMessage
         });
-        return {
-          // Yonge-Dundas Square
-          latitude: 43.6562247,
-          longitude: -79.3828281
-        };
+        return DEFAULT_LOCATION;
       })
       .then(GoogleMaps.lookUpPlaceViaCoordinates)
       .then(results => {
@@ -57,12 +53,12 @@ export class LocationPicker extends React.Component {
 
   render() {
     return (
-      <div className={'pure-alert' + (this.state.error ? ' pure-alert-warning' :'')}>
+      <div className="location-picker">
         {this.state.error ? <LocationError message={this.state.error}/> : ''}
-        {this.state.loading ? 
+        <p>{this.state.loading ? 
           <span>Trying to determine your location...</span> :
           <span>Showing pools near <strong>{this.state.address}</strong></span>
-        }
+        }</p>
       </div>
     );
   }
