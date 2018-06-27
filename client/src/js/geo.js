@@ -12,6 +12,10 @@ export const DEFAULT_LOCATION = {
 };
 
 export function getCoords(geoLocationOptions) {
+  // override for debugging
+  if(window.localStorage && window.localStorage.getItem('location_override')) {
+    return Promise.resolve(JSON.parse(window.localStorage.getItem('location_override')));
+  }
   geoLocationOptions = geoLocationOptions || {maximumAge:60000, timeout:5000, enableHighAccuracy:true};
   return new Promise((resolve, reject) => {
     if (window.navigator && window.navigator.geolocation) {
