@@ -18,7 +18,7 @@ class ScheduleParser
   CURRENT_TIMEZONE = Time.now.getlocal.zone
   CURRENT_TIMEZONE_OFFSET_EASTERN = (Time.zone_offset(CURRENT_TIMEZONE) / 60 / 60)
 
-  def self.parse(url = 'dataloader/static_data/leisure-drop-in.html')
+  def self.parse(url)
     page = Nokogiri::HTML(open(url))
     parse_document(page)
   end

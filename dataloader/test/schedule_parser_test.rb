@@ -19,7 +19,7 @@ class ScheduleParserTest < Test::Unit::TestCase
   # end
 
   def test_parse
-    result = ScheduleParser.parse('static_data/leisure-drop-in.html')
+    result = ScheduleParser.parse('test_data/leisure-drop-in.html')
 
     assert_equal 195, result.size
     assert_equal 'Agincourt Recreation Centre', result.first[:location_name]

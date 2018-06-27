@@ -12,7 +12,7 @@ class LocationParser
 
   VALID_POOL_TYPES = ['Indoor Pool', 'Outdoor Pool']
 
-  def self.parse(url = 'dataloader/static_data/pools.xml')
+  def self.parse(url)
     Nokogiri::XML(open(url))
       .xpath('/POOLS/ROW')
       .select { |row| valid_location?(row) }
