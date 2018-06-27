@@ -32,29 +32,11 @@ class TestParser < Test::Unit::TestCase
   end
 
   def test_normalize_times_simple
-    assert_equal(
-      ['6:00pm', '8:00pm'],
-      ScheduleParser.normalize_times('6 - 8pm')
-    )
-    assert_equal(
-      ['6:30pm', '8:00pm'],
-      ScheduleParser.normalize_times('6:30 - 8pm')
-    )
-    assert_equal(
-      ['6:14pm', '8:45pm'],
-      ScheduleParser.normalize_times('6:14pm - 8:45pm')
-    )
-    assert_equal(
-      ['6:00am', '8:00am'],
-      ScheduleParser.normalize_times('6am - 8')
-    )
-    assert_equal(
-      ['6:15pm', '8:35pm'],
-      ScheduleParser.normalize_times('6:15 - 8:35pm')
-    )
-    assert_equal(
-      ['12:00pm', '2:00pm'],
-      ScheduleParser.normalize_times('12 - 2pm')
-    )
+    assert_equal ['6:00pm', '8:00pm'], ScheduleParser.normalize_times('6 - 8pm')
+    assert_equal ['6:30pm', '8:00pm'], ScheduleParser.normalize_times('6:30 - 8pm')
+    assert_equal ['6:14pm', '8:45pm'], ScheduleParser.normalize_times('6:14pm - 8:45pm')
+    assert_equal ['6:00am', '8:00am'], ScheduleParser.normalize_times('6am - 8')
+    assert_equal ['6:15pm', '8:35pm'], ScheduleParser.normalize_times('6:15 - 8:35pm')
+    assert_equal ['12:00pm', '2:00pm'], ScheduleParser.normalize_times('12 - 2pm')
   end
 end
