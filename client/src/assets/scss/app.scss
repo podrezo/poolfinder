@@ -3,6 +3,7 @@
 //   font-family: 'Verdana', sans;
 //   background-color: $bgcolor;
 // }
-@import '~purecss-sass/vendor/assets/stylesheets/_purecss';
 // TODO: import only the pure CSS components we need
-@import 'sidemenu.scss'
+@import '~purecss-sass/vendor/assets/stylesheets/_purecss';
+@import 'pure-extras.css';
+@import 'sidemenu.scss';

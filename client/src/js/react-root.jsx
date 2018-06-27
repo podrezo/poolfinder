@@ -3,6 +3,7 @@ import 'script-loader!react-dom/umd/react-dom.development.js'; // TODO: change t
 import 'script-loader!moment/moment';
 import {getLocations, getSchedule} from './firebase';
 import {getCoords, distance} from './geo';
+import { LocationPicker } from '../location-picker';
 
 
 
@@ -158,6 +159,7 @@ class PoolList extends React.Component {
 }
 
 ReactDOM.render(
-  <PoolList />,
+  // <PoolList />,
+  <LocationPicker/>,
   document.getElementById('root')
 );
