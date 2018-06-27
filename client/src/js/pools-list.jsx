@@ -23,8 +23,9 @@ class Pool extends React.Component {
       <div className="pure-u-1 pure-alert spacer">
         <div className="pure-g">
           <div className="pure-u-1 pure-u-md-1-3">
-            <h3>{this.props.pool.name} <span className="pure-badge-info">{this.props.pool.distance} km</span></h3>
+            <h3 title={this.props.pool.name} className="pool-name">{this.props.pool.name}</h3>
             <p>{this.props.pool.address}<br/>{this.props.pool.phone}</p>
+            <p><span className="pure-badge-info">{this.props.pool.distance} km</span></p>
           </div>
           <div className="pure-u-1 pure-u-md-2-3">
             <ul>
