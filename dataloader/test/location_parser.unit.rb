@@ -1,5 +1,5 @@
 require 'test/unit'
-require_relative 'location_parser'
+require_relative '../lib/location_parser'
 
 class LocationParserTest < Test::Unit::TestCase
   def test_parse
@@ -12,7 +12,7 @@ class LocationParserTest < Test::Unit::TestCase
       phone: '416-395-7966'
     }
 
-    result = LocationParser.parse('static_data/pools.xml')
+    result = LocationParser.parse('../static_data/pools.xml')
 
     assert_equal 121, result.size
     assert_equal expected_location, result.first
