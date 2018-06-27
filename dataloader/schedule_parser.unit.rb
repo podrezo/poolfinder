@@ -19,10 +19,10 @@ class TestParser < Test::Unit::TestCase
   # end
 
   def test_simple
-    assert_equal(
-      [DateTime.new(2018,4,22,18,30), DateTime.new(2018,4,22,20,0)],
-      ScheduleParser.parse_range('Apr 22', 0, '6:30 - 8pm')
-    )
+    from, to = ScheduleParser.parse_range('Apr 22', 0, '6:30 - 8pm')
+
+    assert_equal '2018-04-22T18:30', from.to_s[0, 16]
+    assert_equal '2018-04-22T20:00', to.to_s[0, 16]
   end
 
   def test_normalize_times_invalid
