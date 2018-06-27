@@ -18,6 +18,21 @@ class ScheduleParser
   CURRENT_TIMEZONE = Time.now.getlocal.zone
   CURRENT_TIMEZONE_OFFSET_EASTERN = (Time.zone_offset(CURRENT_TIMEZONE) / 60 / 60)
 
+  def self.parse_swim_times(url)
+    parse(url).flat_map do |location|
+      location[:activities].flat_map do |activity|
+        activity[:hours].map do |hours|
+          {
+            from: hours[:from],
+            to: hours[:to],
+            activity_name: activity[:name],
+            location_name: location[:location_name],
+          }
+        end
+      end
+    end
+  end
+
   def self.parse(url)
     page = Nokogiri::HTML(open(url))
     parse_document(page)

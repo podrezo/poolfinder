@@ -18,6 +18,16 @@ class ScheduleParserTest < Test::Unit::TestCase
   #     end
   # end
 
+  def test_parse_swim_times
+    result = ScheduleParser.parse_swim_times('test_data/leisure-drop-in.html')
+
+    assert_equal 4510, result.size
+    assert_equal 'Agincourt Recreation Centre', result.first[:location_name]
+    assert_equal 'Leisure Swim', result.first[:activity_name]
+    assert_equal '2018-06-17T14:00', result.first[:from].to_s[0, 16]
+    assert_equal '2018-06-17T17:00', result.first[:to].to_s[0, 16]
+  end
+
   def test_parse
     result = ScheduleParser.parse('test_data/leisure-drop-in.html')
 
