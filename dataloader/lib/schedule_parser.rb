@@ -115,6 +115,21 @@ class ScheduleParser
       }
   end
 
+  def self.parse_range(date, offset_days, times)
+    # Convert times into normalized values
+    times = normalize_times(times)
+    # Create a string to be parsed
+    from_datetime = DateTime.strptime(
+      "#{date} #{times[0]} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
+    )
+    to_datetime = DateTime.strptime(
+      "#{date} #{times[1]} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
+    )
+    from_datetime = from_datetime.next_day(offset_days)
+    to_datetime = to_datetime.next_day(offset_days)
+    [from_datetime, to_datetime]
+  end
+
   # Take a time range string and convert it to an array of two normalized times
   # Example: normalize_times('6-8pm') # oututs ['6:00pm', '8:00pm']
   def self.normalize_times(time_range)
@@ -133,20 +148,5 @@ class ScheduleParser
     to_ampm = from_ampm if to_ampm.nil?
 
     ["#{from_hr}:#{from_min}#{from_ampm}", "#{to_hr}:#{to_min}#{to_ampm}"]
-  end
-
-  def self.parse_range(date, offset_days, times)
-    # Convert times into normalized values
-    times = normalize_times(times)
-    # Create a string to be parsed
-    from_datetime = DateTime.strptime(
-      "#{date} #{times[0]} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
-    )
-    to_datetime = DateTime.strptime(
-      "#{date} #{times[1]} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
-    )
-    from_datetime = from_datetime.next_day(offset_days)
-    to_datetime = to_datetime.next_day(offset_days)
-    [from_datetime, to_datetime]
   end
 end
