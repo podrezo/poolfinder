@@ -37,7 +37,7 @@ class ScheduleParserTest < Test::Unit::TestCase
     assert_equal '2018-06-17T17:00', result.first[:activities].first[:hours].first[:to].to_s[0, 16]
   end
 
-  def test_simple
+  def test_parse_range
     from, to = ScheduleParser.parse_range('Apr 22', 0, '6:30 - 8pm')
 
     assert_equal '2018-04-22T18:30', from.to_s[0, 16]
