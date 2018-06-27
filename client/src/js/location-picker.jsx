@@ -1,7 +1,7 @@
 import 'script-loader!react/umd/react.development.js'; // TODO: change to production
 import 'script-loader!react-dom/umd/react-dom.development.js'; // TODO: change to production
-import { GoogleMaps } from './js/google-maps';
-import { getCoords } from './js/geo';
+import { GoogleMaps } from './google-maps';
+import { getCoords } from './geo';
 
 class LocationError extends React.Component {
   render() {
