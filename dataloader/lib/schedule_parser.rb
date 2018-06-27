@@ -25,8 +25,8 @@ class ScheduleParser
           {
             from: hours[:from],
             to: hours[:to],
-            activity_name: activity[:name],
-            location_name: location[:location_name],
+            activity: activity[:name],
+            location_id: location[:location_id],
           }
         end
       end
@@ -60,9 +60,11 @@ class ScheduleParser
       table_header = location_html.css('table thead tr th').text.strip
       raise "Unexpected table heading '#{table_header}'" if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
       location_name = location_html.css('h2 a').text
+      location_id = location_html.attr('data-id').to_i
       # Build result
       {
         location_name: location_name,
+        location_id: location_id,
         activities: parse_weeks(location_html).flatten
       }
     }

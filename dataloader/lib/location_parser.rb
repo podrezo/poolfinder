@@ -21,7 +21,7 @@ class LocationParser
 
   def self.parse_row(row)
     {
-      id: parse_column(row, ID),
+      id: parse_column(row, ID).to_i,
       name: parse_column(row, LOCATIONNAME),
       latitude: parse_column(row, LATITUDE).to_f,
       longitude: parse_column(row, LONGITUDE).to_f,
