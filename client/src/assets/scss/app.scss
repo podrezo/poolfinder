@@ -85,6 +85,7 @@ a:hover {
   background-color: $bgGrey;
   color: #555;
   overflow: hidden;
+  position: relative;
 }
 .pool-name {
   color: black;
@@ -94,6 +95,21 @@ a:hover {
   padding-bottom: 0.25em;
   margin: 0;
   border-bottom: 1px solid #ccc;
+  font-size: 1.2em
+}
+.pool-distance {
+  background: $torontoBlue;
+  color: white;
+  padding: 0.4em;
+  border-radius: 0 0 0 10px;
+  font-size: 0.9em;
+  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.pool-distance::after {
+  content: " km";
 }
 .pool-category {
   margin-top: 0.25em;

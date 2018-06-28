@@ -53,9 +53,9 @@ class Pool extends React.Component {
     var noSwimTimes = <p><em>N/A</em></p>
 
     // TODO: Add geo uri link like [<a href={'geo:' + this.props.pool.latitude + ',' + this.props.pool.longitude}>Map It</a>]
-    // TODO: Display distance using this.props.pool.distance
     return (
       <div className="pool pure-u-1">
+        <div className="pool-distance">{this.props.pool.distance}</div>
         <div className="pure-g">
           <div className="pure-u-1">
             <h3 title={this.props.pool.name} className="pool-name">{this.props.pool.name}</h3>
