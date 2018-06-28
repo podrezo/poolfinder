@@ -30,7 +30,6 @@ class ScheduleParser
       .css('.pfrProgramDescrList .pfrListing')
       .flat_map do |location_html|
         validate_table_heading(location_html)
-
         location_name = location_html.css('h2 a').text
         location_id = location_html.attr('data-id').to_i
 
@@ -51,19 +50,17 @@ class ScheduleParser
                 # new lines.
                 # TODO: This probably shouldn't rely on splitting on an HTML tag...
                 hours_texts = hours_cell_html.inner_html.split('<br>')
-                hours_texts.map do |hours_text|
-                  range = parse_range(week_start, wday, hours_text)
 
-                  # Assert that we have the matching day of the week
-                  day_of_the_week_attr = hours_cell_html.attr('data-info')
-                  raise "Unexpected day of the week '#{range[0].strftime('%a')}' doesn't match '#{day_of_the_week_attr}'" if range[0].strftime('%a') != day_of_the_week_attr
+                hours_texts.map do |hours_text|
+                  from, to = parse_range(week_start, wday, hours_text)
+                  validate_matching_day_of_week(hours_cell_html, from)
 
                   # Build result
                   {
                     location_id: location_id,
                     activity_name: activity_title,
-                    from: range[0],
-                    to: range[1],
+                    from: from,
+                    to: to,
                   }
                 end
               end
@@ -73,7 +70,18 @@ class ScheduleParser
 
   def self.validate_table_heading(location_html)
     table_header = location_html.css('table thead tr th').text.strip
-    raise "Unexpected table heading '#{table_header}'" if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
+
+    if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
+      raise "Unexpected table heading '#{table_header}'"
+    end
+  end
+
+  def self.validate_matching_day_of_week(hours_cell_html, from)
+    day_of_the_week_attr = hours_cell_html.attr('data-info')
+
+    if from.strftime('%a') != day_of_the_week_attr
+      raise "Unexpected day of the week '#{from.strftime('%a')}' doesn't match '#{day_of_the_week_attr}'"
+    end
   end
 
   def self.has_swim_times?(hours_cell_html)
