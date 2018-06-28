@@ -35,7 +35,6 @@ class Pool extends React.Component {
             return s.to > now && minTime < s.from && s.from < maxTime;
           });
         this.setState({swimTimes: swimTimes});
-        console.log(swimTimes);
       });
   }
 
