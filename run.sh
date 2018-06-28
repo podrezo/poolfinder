@@ -1,4 +1,6 @@
 export FIRESTORE_PROJECT="poolfinder-2679b"
-export FIRESTORE_KEYFILE="key.json"
+export FIRESTORE_KEYFILE="$(pwd)/key.json"
 
-ruby dataloader/lib/run.rb
+pushd ./dataloader/lib
+ruby run.rb
+popd

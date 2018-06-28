@@ -11,10 +11,7 @@ class PoolfinderFirestore
   end
 
   def create_or_update_location(args)
-    # The document ID is just a hash of the name to avoid data duplication
-    hash = HASHER.hexdigest(args[:name])
-
-    @locations_collection.doc(hash).set(args)
+    @locations_collection.doc(args[:id]).set(args)
   end
 
   def create_or_update_schedule(args)
