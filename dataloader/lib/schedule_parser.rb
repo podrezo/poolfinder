@@ -111,16 +111,12 @@ class ScheduleParser
   end
 
   def self.parse_range(date, offset_days, times)
-    # Convert times into normalized values
     from_time, to_time = normalize_times(times)
 
-    # Create a string to be parsed
-    from_datetime = Time.parse("#{date} #{from_time}")
-    to_datetime = Time.parse("#{date} #{to_time}")
-
-    from_datetime = from_datetime + offset_days * DAY
-    to_datetime = to_datetime + offset_days * DAY
-    [from_datetime, to_datetime]
+    [
+      Time.parse("#{date} #{from_time}") + offset_days * DAY,
+      Time.parse("#{date} #{to_time}") + offset_days * DAY
+    ]
   end
 
   # Take a time range string and convert it to an array of two normalized times
