@@ -10,16 +10,6 @@ class ScheduleParser
 
   TIME_RANGE_REGEXP = /(\d{1,2})(:(\d{1,2}))?(am|pm)? - (\d{1,2})(:(\d{1,2}))?(am|pm)?/
 
-  # The date-time format that's going to be supplied at the end
-  # e.g. 'Apr 24 5:36pm', year is assumed to be current one
-  STRPTIME_FORMAT_DATETIME = '%b %d %l:%M%P %z'.freeze
-
-  # ASSUMED_TIMEZONE = 'America/New_York'.freeze
-  # DEFAULT_DATETIME_OUTPUT_FORMAT = '%c %Z'.freeze
-  # Toronto doesn't use timezones not on an even hour, otherwise we'd have a problem
-  CURRENT_TIMEZONE = Time.now.getlocal.zone
-  CURRENT_TIMEZONE_OFFSET_EASTERN = (Time.zone_offset(CURRENT_TIMEZONE) / 60 / 60)
-
   def self.parse_swim_times(url)
     parse(url).flat_map do |location|
       location[:activities].flat_map do |activity|
@@ -125,12 +115,8 @@ class ScheduleParser
     from_time, to_time = normalize_times(times)
 
     # Create a string to be parsed
-    from_datetime = Time.strptime(
-      "#{date} #{from_time} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
-    )
-    to_datetime = Time.strptime(
-      "#{date} #{to_time} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
-    )
+    from_datetime = Time.parse("#{date} #{from_time}")
+    to_datetime = Time.parse("#{date} #{to_time}")
 
     from_datetime = from_datetime + offset_days * DAY
     to_datetime = to_datetime + offset_days * DAY
