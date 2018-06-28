@@ -18,13 +18,14 @@ class Pool extends React.Component {
 
     var noSwimTimes = <p><em>N/A</em></p>
 
-    // TODO: Add geo uri link like [<a href={'geo:' + this.props.pool.coordinates.latitude + ',' + this.props.pool.coordinates.longitude}>Map It</a>]
+    // TODO: Add geo uri link like [<a href={'geo:' + this.props.pool.latitude + ',' + this.props.pool.longitude}>Map It</a>]
     // TODO: Display distance using this.props.pool.distance
     return (
       <div className="pool pure-u-1">
         <div className="pure-g">
           <div className="pure-u-1">
             <h3 title={this.props.pool.name} className="pool-name">{this.props.pool.name}</h3>
+            <h4 className="pool-category">{this.props.pool.category}</h4>
           </div>
           <div className="pure-u-1 pure-u-md-1-3">
             <p>
@@ -58,8 +59,8 @@ export class PoolList extends React.Component {
     var d = distance(
       this._userCoords.latitude,
       this._userCoords.longitude,
-      pool.coordinates.latitude,
-      pool.coordinates.longitude
+      pool.latitude,
+      pool.longitude
     );
     // There's no round to nearest N digits and toFixed converts to string sadly
     d = Math.round( d * 10 ) / 10;

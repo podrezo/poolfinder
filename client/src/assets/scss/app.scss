@@ -28,7 +28,7 @@ The content `<div>` is where all your content goes.
 
 
 /* ---------  Begin custom work here --------- */
-html {
+html, .pure-g [class *= "pure-u"] {
   font-family: 'Open Sans', sans-serif;
 }
 .header {
@@ -73,5 +73,12 @@ html {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-family: 'Open Sans', sans-serif;
+  padding-bottom: 0.25em;
+  margin-bottom: 0;
+  border-bottom: 1px solid #ccc;
+}
+.pool-category {
+  margin-top: 0.25em;
+  margin-bottom: 0;
+  font-size: 0.9em;
 }
