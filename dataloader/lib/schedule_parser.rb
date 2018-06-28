@@ -43,7 +43,8 @@ class ScheduleParser
             hours_cells_html = week_html.css('td')
             hours_html = hours_cells_html
             week_start = week_dates[0]
-            hours_html.each_with_index
+            hours_html
+              .map.with_index
               .select { |hours_cell_html, wday| has_swim_times?(hours_cell_html) }
               .flat_map do |hours_cell_html, wday|
                 # The cell can have multiple swim times in the same cell, separated by
