@@ -80,7 +80,7 @@ a:hover {
 .pool {
   border: 1px solid $torontoBlue;
   border-radius: 4px;
-  padding: 0 1em;
+  padding: 1em;
   margin-bottom: 1.5em;
   background-color: $bgGrey;
   color: #555;
@@ -92,11 +92,18 @@ a:hover {
   overflow: hidden;
   white-space: nowrap;
   padding-bottom: 0.25em;
-  margin-bottom: 0;
+  margin: 0;
   border-bottom: 1px solid #ccc;
 }
 .pool-category {
   margin-top: 0.25em;
   margin-bottom: 0;
   font-size: 0.9em;
+}
+.swimTime {
+  font-size: 0.9em;
+  margin: 0;
+}
+.swimTimeActivity {
+  font-weight: 800;
 }

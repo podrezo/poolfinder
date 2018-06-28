@@ -47,7 +47,7 @@ class Pool extends React.Component {
     var swimTimesList = this.state.swimTimes.map(t => {
       var from_s = moment(t.from).calendar(); 
       var to_s = moment(t.to).format('LT');
-      return <li key={t.from+':'+t.to}>{from_s} to {to_s} ({t.activity})</li>
+      return <p className="swimTime" key={t.from+':'+t.to}>{from_s} to {to_s} <span className="swimTimeActivity">{t.activity}</span></p>
     });
 
     var noSwimTimes = <p><em>N/A</em></p>
@@ -68,9 +68,7 @@ class Pool extends React.Component {
             </p>
           </div>
           <div className="pure-u-1 pure-u-md-2-3">
-            <ul>
-              {swimTimesList.length > 0 ? swimTimesList : noSwimTimes}
-            </ul>
+            {swimTimesList.length > 0 ? swimTimesList : noSwimTimes}
           </div>
         </div>
       </div>
