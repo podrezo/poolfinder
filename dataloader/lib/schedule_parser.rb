@@ -6,6 +6,11 @@ require 'open-uri'
 
 # Parses a given URL into a schedule dictionary
 class ScheduleParser
+  LOCATION = '.pfrProgramDescrList .pfrListing'
+  WEEK = 'table tbody tr'
+  HOURS_CELL = 'td'
+  HOURS_TEXT_SEPARATOR = '<br>'
+
   DAY = 60 * 60 * 24
 
   TIME_RANGE_REGEXP = /(\d{1,2})(:(\d{1,2}))?(am|pm)? - (\d{1,2})(:(\d{1,2}))?(am|pm)?/
@@ -26,61 +31,25 @@ class ScheduleParser
   #             +- Specific time span (e.g. 2 - 5pm)
 
   def self.parse_swim_times(url)
-    Nokogiri::HTML(open(url))
-      .css('.pfrProgramDescrList .pfrListing')
-      .flat_map do |location_html|
-        validate_table_heading(location_html)
-        location_name = location_html.css('h2 a').text
-        location_id = location_html.attr('data-id').to_i
+    Nokogiri::HTML(open(url)).css(LOCATION).flat_map do |location_html|
+      validate_table_heading(location_html)
+      location_html.css(WEEK).flat_map do |week_html|
+        week_html.css(HOURS_CELL).map.with_index
+          .select { |hours_cell_html, wday| has_swim_times?(hours_cell_html) }
+          .flat_map do |hours_cell_html, wday|
+            hours_cell_html.inner_html.split(HOURS_TEXT_SEPARATOR).map do |hours_text|
+              from, to = parse_range(week_start(week_html), wday, hours_text)
+              validate_matching_day_of_week(hours_cell_html, from)
 
-        location_html
-          .css('table tbody tr')
-          .flat_map do |week_html|
-            activity_title = week_html.css('th div').text.strip
-            row_title = week_html.css('th').text.strip
-            week_dates = row_title[activity_title.length..row_title.length].strip.split(' to ')
-            hours_cells_html = week_html.css('td')
-            hours_html = hours_cells_html
-            week_start = week_dates[0]
-            hours_html
-              .map.with_index
-              .select { |hours_cell_html, wday| has_swim_times?(hours_cell_html) }
-              .flat_map do |hours_cell_html, wday|
-                # The cell can have multiple swim times in the same cell, separated by
-                # new lines.
-                # TODO: This probably shouldn't rely on splitting on an HTML tag...
-                hours_texts = hours_cell_html.inner_html.split('<br>')
-
-                hours_texts.map do |hours_text|
-                  from, to = parse_range(week_start, wday, hours_text)
-                  validate_matching_day_of_week(hours_cell_html, from)
-
-                  # Build result
-                  {
-                    location_id: location_id,
-                    activity_name: activity_title,
-                    from: from,
-                    to: to,
-                  }
-                end
-              end
+              {
+                location_id: location_id(location_html),
+                activity_name: activity_name(week_html),
+                from: from,
+                to: to,
+              }
+            end
           end
       end
-  end
-
-  def self.validate_table_heading(location_html)
-    table_header = location_html.css('table thead tr th').text.strip
-
-    if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
-      raise "Unexpected table heading '#{table_header}'"
-    end
-  end
-
-  def self.validate_matching_day_of_week(hours_cell_html, from)
-    day_of_the_week_attr = hours_cell_html.attr('data-info')
-
-    if from.strftime('%a') != day_of_the_week_attr
-      raise "Unexpected day of the week '#{from.strftime('%a')}' doesn't match '#{day_of_the_week_attr}'"
     end
   end
 
@@ -88,6 +57,13 @@ class ScheduleParser
     # Some days don't have swim times, we want to skip those days
     hours_text = hours_cell_html.text.strip
     hours_text.length > 1
+  end
+
+  def self.week_start(week_html)
+    activity_name = activity_name(week_html)
+    row_title = week_html.css('th').text.strip
+    week_dates = row_title[activity_name.length..-1].strip.split(' to ')
+    week_dates.first
   end
 
   def self.parse_range(date, offset_days, times)
@@ -115,5 +91,33 @@ class ScheduleParser
     to_ampm ||= from_ampm
 
     ["#{from_hr}:#{from_min}#{from_ampm}", "#{to_hr}:#{to_min}#{to_ampm}"]
+  end
+
+  def self.location_id(location_html)
+    location_html.attr('data-id').to_i
+  end
+
+  def self.location_name(location_html)
+    location_html.css('h2 a').text
+  end
+
+  def self.activity_name(week_html)
+    week_html.css('th div').text.strip
+  end
+
+  def self.validate_table_heading(location_html)
+    table_header = location_html.css('table thead tr th').text.strip
+
+    if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
+      raise "Unexpected table heading '#{table_header}'"
+    end
+  end
+
+  def self.validate_matching_day_of_week(hours_cell_html, from)
+    day_of_the_week_attr = hours_cell_html.attr('data-info')
+
+    if from.strftime('%a') != day_of_the_week_attr
+      raise "Unexpected day of the week '#{from.strftime('%a')}' doesn't match '#{day_of_the_week_attr}'"
+    end
   end
 end
