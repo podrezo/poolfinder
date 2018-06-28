@@ -1,16 +1,48 @@
 import 'script-loader!react/umd/react.development.js'; // TODO: change to production
 import 'script-loader!react-dom/umd/react-dom.development.js'; // TODO: change to production
 import 'script-loader!moment/moment';
-import {getLocations, getSchedule} from './firebase';
+import {getLocation} from './firebase';
 import {getCoords, distance, DEFAULT_LOCATION} from './geo';
+import LOCATIONS_LIST from './locations';
 
 class Pool extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      swimTimes: []
+    };
   }
 
+  componentDidMount() {
+    getLocation(this.props.pool.id.toString())
+      .then(data => {
+        var minTime = new Date(Date.now() - 1000*60*60*12);
+        var maxTime = new Date(Date.now() + 1000*60*60*24); // TODO: Make this configurable
+        var now = new Date();
+        var swimTimes = data.schedule
+          .map(s => {
+            return {
+              from: new Date(s.from.seconds * 1000),
+              to: new Date(s.to.seconds * 1000),
+              activity: s.activity
+            };
+          })
+          .filter(s => {
+            // because it is possible for a swim time to have started before NOW
+            // that is still going on and relevant (especially long hours like
+            // 11am-6pm), we want to check for times that are already underway
+            // in addition to hours that haven't started yet.
+            return s.to > now && minTime < s.from && s.from < maxTime;
+          });
+        this.setState({swimTimes: swimTimes});
+        console.log(swimTimes);
+      });
+  }
+
+  //getLocation
+
   render(id) {
-    var swimTimesList = this.props.pool.swimTimes.map(t => {
+    var swimTimesList = this.state.swimTimes.map(t => {
       var from_s = moment(t.from).calendar(); 
       var to_s = moment(t.to).format('LT');
       return <li key={t.from+':'+t.to}>{from_s} to {to_s} ({t.activity})</li>
@@ -83,8 +115,6 @@ export class PoolList extends React.Component {
   }
 
   componentDidMount() {
-    var minTime = new Date(Date.now() - 1000*60*60*12);
-    var maxTime = new Date(Date.now() + 1000*60*60*24); // TODO: Make this configurable
     getCoords()
       .then(coords => {
         this._userCoords = coords;
@@ -92,27 +122,14 @@ export class PoolList extends React.Component {
       .catch(() => {
         this._userCoords = DEFAULT_LOCATION;
       })
-      .then(getLocations)
-      .then(pools => {
-        this._pools = pools;
-      })
-      .then(() => getSchedule(minTime, maxTime))
-      .then(schedule => {
-        var now = Date.now() / 1000;
-        window.schedule = schedule;
-        this._schedule = schedule.filter(s => {
-          // because it is possible for a swim time to have started before NOW
-          // that is still going on and relevant (especially long hours like
-          // 11am-6pm), we want to check for times that are already underway
-          // in addition to hours that haven't started yet.
-          return (s.from.seconds < now && now < s.to.seconds) || s.from.seconds > now;
-        });
-      })
       .then(() => {
         // process the pool list
-        this._pools = this._pools
+        this._pools = LOCATIONS_LIST
           .map(this._mapPoolToDistance.bind(this))
-          .filter(pool => pool.distance < 3) // TODO: Make this configurable
+          .filter(pool => {
+            // TODO: Make this configurable
+            return pool.distance < 2.5 && ['Indoor Pool', 'Outdoor Pool'].indexOf(pool.category) > -1;
+          }) 
           // sort by closest pool first
           .sort((a,b) => {
             return a.distance - b.distance;
