@@ -43,9 +43,6 @@ class ScheduleParser
             row_title = week_html.css('th').text.strip
             week_dates = row_title[activity_title.length..row_title.length].strip.split(' to ')
             hours_cells_html = week_html.css('td')
-
-            # There may be multiple hours for the same day, but we want a flat
-            # array of times so we use flatten
             hours_html = hours_cells_html
             week_start = week_dates[0]
             hours = hours_html.each_with_index
@@ -55,7 +52,6 @@ class ScheduleParser
                 hours_text.length > 1
               end
               .flat_map do |hours_cell_html, wday|
-                # The index carries over from the select, luckily!
                 # The cell can have multiple swim times in the same cell, separated by
                 # new lines.
                 # TODO: This probably shouldn't rely on splitting on an HTML tag...
