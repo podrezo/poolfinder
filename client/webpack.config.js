@@ -60,6 +60,19 @@ const config = {
           "css-loader", // translates CSS into CommonJS
           "sass-loader" // compiles Sass to CSS
         ]
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        include: [
+          path.resolve(__dirname, 'src', 'assets')
+        ],
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'file-loader?name=assets/[name].[ext]',
+            options: {}
+          }
+        ]
       }
     ]
   }
