@@ -29,15 +29,13 @@ class ScheduleParser
     Nokogiri::HTML(open(url))
       .css('.pfrProgramDescrList .pfrListing')
       .flat_map do |location_html|
-        # Sanity check - does the table have the expected columns?
-        table_header = location_html.css('table thead tr th').text.strip
-        raise "Unexpected table heading '#{table_header}'" if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
+        validate_table_heading(location_html)
 
         location_name = location_html.css('h2 a').text
         location_id = location_html.attr('data-id').to_i
 
-        # Build result
-        location_html.css('table tbody tr')
+        location_html
+          .css('table tbody tr')
           .flat_map do |week_html|
             activity_title = week_html.css('th div').text.strip
             row_title = week_html.css('th').text.strip
@@ -45,18 +43,14 @@ class ScheduleParser
             hours_cells_html = week_html.css('td')
             hours_html = hours_cells_html
             week_start = week_dates[0]
-            hours = hours_html.each_with_index
-              .select do |hours_cell_html, wday|
-                # Some days don't have swim times, we want to skip those days
-                hours_text = hours_cell_html.text.strip
-                hours_text.length > 1
-              end
+            hours_html.each_with_index
+              .select { |hours_cell_html, wday| has_swim_times?(hours_cell_html) }
               .flat_map do |hours_cell_html, wday|
                 # The cell can have multiple swim times in the same cell, separated by
                 # new lines.
                 # TODO: This probably shouldn't rely on splitting on an HTML tag...
                 hours_texts = hours_cell_html.inner_html.split('<br>')
-                hours_texts.map { |hours_text|
+                hours_texts.map do |hours_text|
                   range = parse_range(week_start, wday, hours_text)
 
                   # Assert that we have the matching day of the week
@@ -70,10 +64,21 @@ class ScheduleParser
                     from: range[0],
                     to: range[1],
                   }
-                }
+                end
               end
           end
       end
+  end
+
+  def self.validate_table_heading(location_html)
+    table_header = location_html.css('table thead tr th').text.strip
+    raise "Unexpected table heading '#{table_header}'" if table_header != 'Program  Sun  Mon  Tue  Wed  Thu  Fri  Sat'
+  end
+
+  def self.has_swim_times?(hours_cell_html)
+    # Some days don't have swim times, we want to skip those days
+    hours_text = hours_cell_html.text.strip
+    hours_text.length > 1
   end
 
   def self.parse_range(date, offset_days, times)
