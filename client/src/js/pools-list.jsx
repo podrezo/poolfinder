@@ -33,6 +33,9 @@ class Pool extends React.Component {
             // 11am-6pm), we want to check for times that are already underway
             // in addition to hours that haven't started yet.
             return s.to > now && minTime < s.from && s.from < maxTime;
+          })
+          .sort((a,b) => {
+            return a.from > b.from;
           });
         this.setState({swimTimes: swimTimes});
       });
