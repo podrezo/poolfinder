@@ -112,7 +112,7 @@ export class PoolList extends React.Component {
         // process the pool list
         this._pools = this._pools
           .map(this._mapPoolToDistance.bind(this))
-          .filter(pool => pool.distance < 5) // TODO: Make this configurable
+          .filter(pool => pool.distance < 3) // TODO: Make this configurable
           // sort by closest pool first
           .sort((a,b) => {
             return a.distance - b.distance;
