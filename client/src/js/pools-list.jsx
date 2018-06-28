@@ -127,13 +127,15 @@ export class PoolList extends React.Component {
         this._pools = LOCATIONS_LIST
           .map(this._mapPoolToDistance.bind(this))
           .filter(pool => {
-            // TODO: Make this configurable
-            return pool.distance < 2.5 && ['Indoor Pool', 'Outdoor Pool'].indexOf(pool.category) > -1;
+            // TODO: Do we want to include splash pads and wading pools too?
+            return ['Indoor Pool', 'Outdoor Pool'].indexOf(pool.category) > -1;
           }) 
           // sort by closest pool first
           .sort((a,b) => {
             return a.distance - b.distance;
-          });
+          })
+          // Show only closest 5 pools
+          .slice(0, 5);
         // filter the schedule to contain only swim times for locations we're interested in
         var localPoolNames = this._pools.map(pool => pool.name);
         this._schedule = this._schedule.filter(s => localPoolNames.indexOf(s.location_name) > -1);
