@@ -23,8 +23,8 @@ class ScheduleParserTest < Test::Unit::TestCase
     assert_equal 4510, result.size
     assert_equal 'Agincourt Recreation Centre', result.first[:location_name]
     assert_equal 'Leisure Swim', result.first[:activity_name]
-    assert_equal '2018-06-17T14:00', result.first[:from].to_s[0, 16]
-    assert_equal '2018-06-17T17:00', result.first[:to].to_s[0, 16]
+    assert_equal '2018-06-17 14:00', result.first[:from].to_s[0, 16]
+    assert_equal '2018-06-17 17:00', result.first[:to].to_s[0, 16]
   end
 
   def test_parse
@@ -33,15 +33,15 @@ class ScheduleParserTest < Test::Unit::TestCase
     assert_equal 195, result.size
     assert_equal 'Agincourt Recreation Centre', result.first[:location_name]
     assert_equal 'Leisure Swim', result.first[:activities].first[:name]
-    assert_equal '2018-06-17T14:00', result.first[:activities].first[:hours].first[:from].to_s[0, 16]
-    assert_equal '2018-06-17T17:00', result.first[:activities].first[:hours].first[:to].to_s[0, 16]
+    assert_equal '2018-06-17 14:00', result.first[:activities].first[:hours].first[:from].to_s[0, 16]
+    assert_equal '2018-06-17 17:00', result.first[:activities].first[:hours].first[:to].to_s[0, 16]
   end
 
   def test_parse_range
     from, to = ScheduleParser.parse_range('Apr 22', 0, '6:30 - 8pm')
 
-    assert_equal '2018-04-22T18:30', from.to_s[0, 16]
-    assert_equal '2018-04-22T20:00', to.to_s[0, 16]
+    assert_equal '2018-04-22 18:30', from.to_s[0, 16]
+    assert_equal '2018-04-22 20:00', to.to_s[0, 16]
   end
 
   def test_normalize_times_simple

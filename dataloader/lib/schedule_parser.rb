@@ -6,6 +6,8 @@ require 'open-uri'
 
 # Parses a given URL into a schedule dictionary
 class ScheduleParser
+  DAY = 60 * 60 * 24
+
   TIME_RANGE_REGEXP = /(\d{1,2})(:(\d{1,2}))?(am|pm)? - (\d{1,2})(:(\d{1,2}))?(am|pm)?/
 
   # The date-time format that's going to be supplied at the end
@@ -81,6 +83,7 @@ class ScheduleParser
       # There may be multiple hours for the same day, but we want a flat
       # array of times so we use flatten
       hours = parse_hours(hours_cells_html, week_dates[0]).flatten
+
       {
         name: activity_title,
         hours: hours
@@ -122,15 +125,15 @@ class ScheduleParser
     from_time, to_time = normalize_times(times)
 
     # Create a string to be parsed
-    from_datetime = DateTime.strptime(
+    from_datetime = Time.strptime(
       "#{date} #{from_time} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
     )
-    to_datetime = DateTime.strptime(
+    to_datetime = Time.strptime(
       "#{date} #{to_time} #{CURRENT_TIMEZONE_OFFSET_EASTERN}", STRPTIME_FORMAT_DATETIME
     )
 
-    from_datetime = from_datetime.next_day(offset_days)
-    to_datetime = to_datetime.next_day(offset_days)
+    from_datetime = from_datetime + offset_days * DAY
+    to_datetime = to_datetime + offset_days * DAY
     [from_datetime, to_datetime]
   end
 
