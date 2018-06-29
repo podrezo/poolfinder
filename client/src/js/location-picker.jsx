@@ -57,7 +57,7 @@ export class LocationPicker extends React.Component {
       });
   }
   changeAddress(event) {
-    var addr = window.prompt('Enter address');
+    var addr = window.prompt('Enter an address (e.g. "11 Crown Hill Place")');
     if(!addr) return;
     GoogleMaps.lookUpPlaceViaAddress(addr)
       .then(result => {
@@ -74,7 +74,7 @@ export class LocationPicker extends React.Component {
         {this.state.error ? <LocationError message={this.state.error}/> : ''}
         <p>{this.state.loading ? 
           <span>Trying to determine your location...</span> :
-          <span>Showing pools near <strong>{this.state.address}</strong> [<a onClick={this.changeAddress}>Not here?</a>]</span>
+          <span>Showing pools near <strong>{this.state.address}</strong>. Not here? &laquo;<a onClick={this.changeAddress}>Change search address</a>&raquo;</span>
         }</p>
       </div>
     );
