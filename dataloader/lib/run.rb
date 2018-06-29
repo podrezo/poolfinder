@@ -59,19 +59,16 @@ class Main
 
   def send_locations_to_firestore(locations, total_schedule)
     locations
-      .map do |location|
-        location[:schedule] = total_schedule
-          .select { |s| s[:location_id] == location[:id] }
-          .map do |s|
-            {
-              from: s[:from],
-              to: s[:to],
-              activity: s[:activity],
-            }
-          end
-        location
-      end
+      .map { |location| add_schedule_to_location(location, total_schedule) }
       .each { |location| @firestore.create_or_update_location(location) }
+  end
+
+  def add_schedule_to_location(location, total_schedule)
+    location[:schedule] = total_schedule
+      .select { |s| s[:location_id] == location[:id] }
+      .map { |s| s.slice(:from, :to, :activity) }
+
+    location
   end
 end
 
