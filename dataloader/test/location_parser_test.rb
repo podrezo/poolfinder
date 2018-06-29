@@ -11,7 +11,7 @@ class LocationParserTest < Test::Unit::TestCase
       longitude: -79.54407233,
       name: 'Marie Curtis Park',
       phone: ' '
-     }
+    }
 
     result = LocationParser.parse('test_data/pools.xml')
 
