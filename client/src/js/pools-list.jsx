@@ -2,7 +2,7 @@ import 'script-loader!react/umd/react.development.js'; // TODO: change to produc
 import 'script-loader!react-dom/umd/react-dom.development.js'; // TODO: change to production
 import 'script-loader!moment/moment';
 import {getLocation} from './firebase';
-import {getCoords, distance, DEFAULT_LOCATION} from './geo';
+import {distance} from './geo';
 import LOCATIONS_LIST from './locations';
 
 class Pool extends React.Component {
@@ -47,7 +47,7 @@ class Pool extends React.Component {
     var swimTimesList = this.state.swimTimes.map(t => {
       var from_s = moment(t.from).calendar(); 
       var to_s = moment(t.to).format('LT');
-      return <p className="swimTime" key={t.from+':'+t.to}>{from_s} to {to_s} <span className="swimTimeActivity">{t.activity}</span></p>
+      return <p className="swimTime" key={t.from+':'+t.to+':'+id+':'+t.activity}>{from_s} to {to_s} <span className="swimTimeActivity">{t.activity}</span></p>
     });
 
     var noSwimTimes = <p><em>N/A</em></p>
@@ -82,15 +82,12 @@ export class PoolList extends React.Component {
     this.state = {
       pools: []
     };
-    this._pools = [];
-    this._schedule = [];
-    this._userCoords = null;
   }
 
   _mapPoolToDistance(pool) {
     var d = distance(
-      this._userCoords.latitude,
-      this._userCoords.longitude,
+      this.props.latitude,
+      this.props.longitude,
       pool.latitude,
       pool.longitude
     );
@@ -100,52 +97,33 @@ export class PoolList extends React.Component {
     return pool;
   }
 
-  _mapScheduleToLocation(pool) {
-    const relevantSwimTimes = this._schedule
-      .filter(s => s.location_name === pool.name)
-      .map(s => {
-        return {
-          from: s.from.seconds*1000,
-          to: s.to.seconds*1000,
-          activity: s.activity_name
-        };
-      });
-    pool.swimTimes = relevantSwimTimes;
-    return pool;
-  }
-
-  componentDidMount() {
-    getCoords()
-      .then(coords => {
-        this._userCoords = coords;
+  componentDidUpdate(prevProps) {
+    console.log(`New location set: ${this.props.latitude}, ${this.props.longitude}`);
+    // Don't update if we didn't set user's location
+    if (!this.props.latitude || !this.props.longitude) {
+      return;
+    }
+    // Don't update if the latitude/longitude haven't changed
+    if (this.props.latitude === prevProps.latitude && this.props.longitude === prevProps.longitude) {
+      return;
+    }
+    // process the pool list
+    var pools = LOCATIONS_LIST
+      .map(this._mapPoolToDistance.bind(this))
+      .filter(pool => {
+        // TODO: Do we want to include splash pads and wading pools too?
+        return ['Indoor Pool', 'Outdoor Pool'].indexOf(pool.category) > -1;
+      }) 
+      // sort by closest pool first
+      .sort((a,b) => {
+        return a.distance - b.distance;
       })
-      .catch(() => {
-        this._userCoords = DEFAULT_LOCATION;
-      })
-      .then(() => {
-        // process the pool list
-        this._pools = LOCATIONS_LIST
-          .map(this._mapPoolToDistance.bind(this))
-          .filter(pool => {
-            // TODO: Do we want to include splash pads and wading pools too?
-            return ['Indoor Pool', 'Outdoor Pool'].indexOf(pool.category) > -1;
-          }) 
-          // sort by closest pool first
-          .sort((a,b) => {
-            return a.distance - b.distance;
-          })
-          // Show only closest 5 pools
-          .slice(0, 5);
-        // filter the schedule to contain only swim times for locations we're interested in
-        var localPoolNames = this._pools.map(pool => pool.name);
-        this._schedule = this._schedule.filter(s => localPoolNames.indexOf(s.location_name) > -1);
-        // combine schedule with location data
-        this._pools = this._pools.map(this._mapScheduleToLocation.bind(this));
-        // set the state to refresh the component
-        this.setState({
-          pools: this._pools
-        });
-      });
+      // Show only closest 5 pools
+      .slice(0, 5);
+    // set the state to refresh the component
+    this.setState({
+      pools: pools
+    });
   }
 
   render() {

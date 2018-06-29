@@ -18,14 +18,20 @@ export class LocationPicker extends React.Component {
       loading: true,
       address: ''
     };
+    this.changeAddress = this.changeAddress.bind(this);
   }
 
   componentDidMount() {
     getCoords()
+      .then(coords => {
+        this.props.locationChangedHandler(coords);
+        return coords;
+      })
       .catch(errorMessage => {
         this.setState({
           error: errorMessage
         });
+        this.props.locationChangedHandler(DEFAULT_LOCATION);
         return DEFAULT_LOCATION;
       })
       .then(GoogleMaps.lookUpPlaceViaCoordinates)
@@ -50,14 +56,25 @@ export class LocationPicker extends React.Component {
         });
       });
   }
-
+  changeAddress(event) {
+    var addr = window.prompt('Enter address');
+    if(!addr) return;
+    GoogleMaps.lookUpPlaceViaAddress(addr)
+      .then(result => {
+        this.setState({
+          address: result.address
+        });
+        // result has the address too, which we don't need, but we ignore it
+        this.props.locationChangedHandler(result);
+      });
+  }
   render() {
     return (
       <div className="location-picker">
         {this.state.error ? <LocationError message={this.state.error}/> : ''}
         <p>{this.state.loading ? 
           <span>Trying to determine your location...</span> :
-          <span>Showing pools near <strong>{this.state.address}</strong></span>
+          <span>Showing pools near <strong>{this.state.address}</strong> [<a onClick={this.changeAddress}>Not here?</a>]</span>
         }</p>
       </div>
     );
