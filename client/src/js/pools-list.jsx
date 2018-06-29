@@ -50,7 +50,7 @@ class Pool extends React.Component {
       return <p className="swimTime" key={t.from+':'+t.to+':'+id+':'+t.activity}>{from_s} to {to_s} <span className="swimTimeActivity">{t.activity}</span></p>
     });
 
-    var noSwimTimes = <p><em>N/A</em></p>
+    var noSwimTimes = <p><em>No swim times scheduled in the next 24 hours.</em></p>
 
     // TODO: Add geo uri link like [<a href={'geo:' + this.props.pool.latitude + ',' + this.props.pool.longitude}>Map It</a>]
     return (
@@ -98,7 +98,6 @@ export class PoolList extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(`New location set: ${this.props.latitude}, ${this.props.longitude}`);
     // Don't update if we didn't set user's location
     if (!this.props.latitude || !this.props.longitude) {
       return;

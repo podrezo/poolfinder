@@ -18,7 +18,6 @@ class PoolFinderRoot extends React.Component {
       latitude: newLocation.latitude,
       longitude: newLocation.longitude,
     });
-    console.log(`New location set: ${this.state.latitude}, ${this.state.longitude}`);
   }
   render() {
     return(
