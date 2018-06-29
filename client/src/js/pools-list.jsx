@@ -153,7 +153,6 @@ export class PoolList extends React.Component {
     var rows = this.state.pools.map(pool => 
       <Pool key={pool.name} pool={pool} />
     );
-    // TODO: If there are no pools nearby display some message
     return (
       <div className="pure-g">
         {rows}
