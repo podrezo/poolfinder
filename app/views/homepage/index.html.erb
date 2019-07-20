@@ -1,7 +1,20 @@
 <h1>Pools</h1>
 
-<ul>
+
 <% @locations.each do |location| %>
-  <li><%= location.name %></li>
+  <h2><%= location.name %></h2>
+  <table border="1">
+    <tr>
+      <th>Activity</th>
+      <th>From</th>
+      <th>To</th>
+    </tr>
+    <% location.schedule.where("time_to < ?", Time.now + 2.days).order(time_from: :asc).each do |t| %>
+      <tr>
+        <td><%= t[:activity] %></td>
+        <td><%= t[:time_from].strftime("%F %H:%M") %></td>
+        <td><%= t[:time_to].strftime("%F %H:%M") %></td>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
-</ul>
