@@ -1,0 +1,1 @@
+p Schedule.where("time_to < ?", DateTime.now).delete_all
