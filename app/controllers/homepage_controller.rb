@@ -9,4 +9,10 @@ class HomepageController < ApplicationController
       @locations = Location.all
     end    
   end
+
+  def search
+    @categories = Location.select(:category).map(&:category).uniq
+    p @categories
+    render 'homepage/search'
+  end
 end

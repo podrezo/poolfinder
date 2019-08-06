@@ -49,3 +49,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'activerecord-postgis-adapter'
+
+gem 'webpacker', '~> 4.x'
