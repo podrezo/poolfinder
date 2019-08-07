@@ -1,5 +1,20 @@
 <h1>Search</h1>
 
-<% @categories.each do |category| %>
-<h2><%= category %></h2>
+
+
+<%= form_tag url_for({ action: 'index', controller: 'homepage'}), {method: :get, :class => 'pure-form'} do %>
+  <fieldset>
+    <legend>Search pool times</legend>
+
+    <% @categories.each do |category| %>
+      
+      <%= label_tag category, {class: 'pure-checkbox'} do %>
+        <%= check_box_tag(category) %> <%= category %>
+      <% end %>
+    <% end %>
+
+    <button type="submit" class="pure-button pure-button-primary">Search times</button>
+  </fieldset>
+  
+  
 <% end %>
